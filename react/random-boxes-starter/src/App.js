@@ -5,13 +5,32 @@ class App extends Component {
   
   constructor(props) {
     super(props);
+    this.state = {
+      boxes: this.getBoxes(32)
+    };
+    setInterval(() => {
+      const { boxes } = this.state;
+      const boxesCount = boxes.length;
+      const randomBox = Math.floor(Math.random() * boxesCount);
+      const newBoxes = boxes.map((item, index) => index === randomBox ? Math.floor(Math.random() * this.props.allColors.length) : item);
+      this.setState({...this.state, boxes: newBoxes});
+    }, 300);
   }
+
+  getBoxes = (boxesCount) => {
+    const result = [];
+    const allColorsLength = this.props.allColors.length;
+    for (let i = 0; i < boxesCount; i++) {
+      result[i] = Math.floor(Math.random() * allColorsLength);
+    }
+    return result;
+  };
   
   render() {
-
+    const boxElements = this.state.boxes.map((item, index) => (<div className="box" key={index} style={{background: this.props.allColors[item]}}></div>))
     return (
       <div className="App">
-        Render boxes here
+        {boxElements}
       </div>
     );
   }
